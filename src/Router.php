@@ -1,11 +1,10 @@
 <?php
 
 namespace App;
-use mysql_xdevapi\SqlStatementResult;
 
 class Router
 {
-    public $currentRoute;
+    public string $currentRoute;
 
     public function __construct()
     {
@@ -36,8 +35,29 @@ class Router
         return $resourceValue ?: false;
     }
 
-    public static function runCallback(string $route, callable $callback)
+    public static function runCallback(string $route, callable|array $callback): void
     {
+        if (gettype($callback) == 'array')
+        {
+            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+            if ($resourceValue)
+            {
+                $resourceRoute = str_replace('{id}', $resourceValue, $route);
+                if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
+                {
+                    var_dump((new $callback[0])->{$callback[1]}()); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
+                    exit();  // new $callback[0]->index qilsak hardoim ham index kelavermaydi bu denamik bo'lishi kerak. Nimaga 1 chunki qaysi method ishlashi 1 indexda jonatilgan
+                }
+            }
+            if ($route == self::getRoute())
+            {
+                var_dump((new $callback[0])->{$callback[1]}());
+                exit();
+            }
+        }
+
+
+
         $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
         if ($resourceValue)
         {
@@ -56,7 +76,7 @@ class Router
     }
 
 
-    public static function get($route, $callback): void
+    public static function get(string $route, callable|array $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET')
         {
@@ -65,7 +85,7 @@ class Router
     }
 
 
-    public static function post($route, $callback): void
+    public static function post(string $route, callable|array $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
@@ -75,7 +95,7 @@ class Router
 
 
 
-    public static function put($route, $callback): void
+    public static function put(string $route, callable|array $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')
         {
@@ -86,7 +106,7 @@ class Router
         }
     }
 
-    public static function delete($route, $callback): void
+    public static function delete(string $route, callable|array $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
         {
@@ -99,9 +119,4 @@ class Router
         return mb_stripos(self::getRoute(), '/api') === 0;
     }
 
-
-    public static function isTelegram()
-    {
-        return mb_stripos(self::getRoute(), '/telegram') === 0;
-    }
 }
