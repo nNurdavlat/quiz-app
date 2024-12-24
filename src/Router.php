@@ -45,13 +45,13 @@ class Router
                 $resourceRoute = str_replace('{id}', $resourceValue, $route);
                 if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
                 {
-                    var_dump((new $callback[0])->{$callback[1]}()); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
+                    (new $callback[0])->{$callback[1]}(); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
                     exit();  // new $callback[0]->index qilsak hardoim ham index kelavermaydi bu denamik bo'lishi kerak. Nimaga 1 chunki qaysi method ishlashi 1 indexda jonatilgan
                 }
             }
             if ($route == self::getRoute())
             {
-                var_dump((new $callback[0])->{$callback[1]}());
+                (new $callback[0])->{$callback[1]}();
                 exit();
             }
         }
