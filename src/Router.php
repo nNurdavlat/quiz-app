@@ -36,55 +36,40 @@ class Router
         return $resourceValue ?: false;
     }
 
+    public static function runCallback(string $route, callable $callback)
+    {
+        $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+        if ($resourceValue)
+        {
+            $resourceRoute = str_replace('{id}', $resourceValue, $route);
+            if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
+            {
+                $callback($resourceValue);
+                exit();
+            }
+        }
+        if ($route == self::getRoute())
+        {
+            $callback();
+            exit();
+        }
+    }
+
 
     public static function get($route, $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET')
         {
-            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
-
-            if ($resourceValue)
-            {
-                $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
-                {
-                    $callback($resourceValue);
-                    exit();
-                }
-            }
-
-
-            if ($route == self::getRoute())
-            {
-                $callback();
-                exit();
-            }
+            self::runCallback($route, $callback);
         }
     }
 
 
-    public static function post($route, $callback)
+    public static function post($route, $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
-
-            if ($resourceValue)
-            {
-                $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                if ($resourceRoute == self::getRoute())
-                {
-                    $callback($resourceValue);
-                    exit();
-                }
-            }
-
-
-            if ($route == self::getRoute())
-            {
-                $callback();
-                exit();
-            }
+            self::runCallback($route, $callback);
         }
     }
 
@@ -92,26 +77,11 @@ class Router
 
     public static function put($route, $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') // API ga ham ishlashi uchun. POSTMAN da PUT ham keladi
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')
         {
             if ((isset($_POST['_method']) &&  $_POST['_method'] == 'PUT') || $_SERVER['REQUEST_METHOD'] == 'PUT')
             {
-                $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
-                if ($resourceValue)
-                {
-                    $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                    if ($resourceRoute == self::getRoute())
-                    {
-                        $callback($resourceValue);
-                        exit();
-                    }
-                }
-
-                if ($route == self::getRoute())
-                {
-                    $callback();
-                    exit();
-                }
+                self::runCallback($route, $callback);
             }
         }
     }
@@ -120,23 +90,7 @@ class Router
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
         {
-            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
-            if ($resourceValue)
-            {
-                $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                if ($resourceRoute == self::getRoute())
-                {
-                    $callback($resourceValue);
-                    exit();
-                }
-            }
-
-
-            if ($route == self::getRoute())
-            {
-                $callback();
-                exit();
-            }
+           self::runCallback($route, $callback);
         }
     }
 
