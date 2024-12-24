@@ -1,3 +1,7 @@
 <?php
 
-echo "Welcome to the web.php";
+use App\Router;
+
+Router::get('/', function (
+    echo "Hello World!\n"
+));

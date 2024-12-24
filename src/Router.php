@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use mysql_xdevapi\SqlStatementResult;
+
 class Router
 {
     public $currentRoute;
@@ -10,8 +12,13 @@ class Router
         $this->currentRoute = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); //Bu localhost/ <- Shu bo'sh joydagi yozuvni olib beradi yoki bolmasa "/" shuni oladi
     }
 
+    public static function getRoute(): false|array|int|string|null
+    {
+        return (new static())->currentRoute;
+    }
 
-    public function getResource($route)
+
+    public static function getResource($route): false|string
     {
         $resourceIndex = mb_strripos($route, '{id}');
 
@@ -20,7 +27,7 @@ class Router
             return false;
         }
 
-        $resourceValue = substr($this->currentRoute, $resourceIndex); // shu yozuvdan kein yana nimadur bormi shuni tekshiradi
+        $resourceValue = substr(self::getRoute(), $resourceIndex); // shu yozuvdan kein yana nimadur bormi shuni tekshiradi
 
         if ($limit = mb_stripos($resourceValue, '/')) { // Limitga masalan 90/update bo'lsa 2 qaytadi chunki / 3 uzunlikda turibdi
             return substr($resourceValue, 0, $limit);
@@ -30,16 +37,16 @@ class Router
     }
 
 
-    public static function get($route, $callback)
+    public static function get($route, $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET')
         {
-            $resourceValue = $this->getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
 
             if ($resourceValue)
             {
                 $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                if ($resourceRoute == (new static())->currentRoute) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
+                if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
                 {
                     $callback($resourceValue);
                     exit();
@@ -47,7 +54,7 @@ class Router
             }
 
 
-            if ($route == (new static())->currentRoute)
+            if ($route == self::getRoute())
             {
                 $callback();
                 exit();
@@ -56,16 +63,16 @@ class Router
     }
 
 
-    public function post($route, $callback)
+    public static function post($route, $callback)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $resourceValue = $this->getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
 
             if ($resourceValue)
             {
                 $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                if ($resourceRoute == $this->currentRoute)
+                if ($resourceRoute == self::getRoute())
                 {
                     $callback($resourceValue);
                     exit();
@@ -73,7 +80,7 @@ class Router
             }
 
 
-            if ($route == $this->currentRoute)
+            if ($route == self::getRoute())
             {
                 $callback();
                 exit();
@@ -83,24 +90,24 @@ class Router
 
 
 
-    public function put($route, $callback)
+    public static function put($route, $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST')
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') // API ga ham ishlashi uchun. POSTMAN da PUT ham keladi
         {
-            if (isset($_POST['_method']) &&  $_POST['_method'] == 'PUT')
+            if ((isset($_POST['_method']) &&  $_POST['_method'] == 'PUT') || $_SERVER['REQUEST_METHOD'] == 'PUT')
             {
-                $resourceValue = $this->getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+                $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
                 if ($resourceValue)
                 {
                     $resourceRoute = str_replace('{id}', $resourceValue, $route);
-                    if ($resourceRoute == $this->currentRoute)
+                    if ($resourceRoute == self::getRoute())
                     {
                         $callback($resourceValue);
                         exit();
                     }
                 }
 
-                if ($route == $this->currentRoute)
+                if ($route == self::getRoute())
                 {
                     $callback();
                     exit();
@@ -109,14 +116,38 @@ class Router
         }
     }
 
-    public function isApiCall(): bool
+    public static function delete($route, $callback): void
     {
-        return mb_stripos($this->currentRoute, '/api') === 0;
+        if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
+        {
+            $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
+            if ($resourceValue)
+            {
+                $resourceRoute = str_replace('{id}', $resourceValue, $route);
+                if ($resourceRoute == self::getRoute())
+                {
+                    $callback($resourceValue);
+                    exit();
+                }
+            }
+
+
+            if ($route == self::getRoute())
+            {
+                $callback();
+                exit();
+            }
+        }
+    }
+
+    public static function isApiCall(): bool
+    {
+        return mb_stripos(self::getRoute(), '/api') === 0;
     }
 
 
-    public function isTelegram()
+    public static function isTelegram()
     {
-        return mb_stripos($this->currentRoute, '/telegram') === 0;
+        return mb_stripos(self::getRoute(), '/telegram') === 0;
     }
 }
