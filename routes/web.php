@@ -2,6 +2,6 @@
 
 use App\Router;
 
-Router::get('/', function (
-    echo "Hello World!\n"
-));
+Router::get('/', function (){
+    echo 'Hello World!';
+});
