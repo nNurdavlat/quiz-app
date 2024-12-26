@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use Random\RandomException;
-
 trait HasApiTokens
 {
     protected string $api_token;

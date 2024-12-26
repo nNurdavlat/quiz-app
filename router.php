@@ -1,6 +1,6 @@
 <?php
 
-use App\Router;
+use App\Http\Router;
 
 if (Router::isApiCall()) {
     require 'routes/api.php';

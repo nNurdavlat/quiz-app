@@ -2,11 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\DB;
-
 use App\Traits\HasApiTokens;
-use PDO;
-
 
 
 class User extends DB  // User ichida DB property lari bor meros olganimiz uchun
