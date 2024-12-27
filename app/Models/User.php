@@ -20,7 +20,7 @@ class User extends DB  // User ichida DB property lari bor meros olganimiz uchun
         ]);
         $userId = $this->conn->lastInsertId();
         $this-> createApiToken($userId);
-        return $userId;
+        return true;
     }
 
     public function getUser(string $email, string $password): bool  // LOGIN
@@ -34,6 +34,7 @@ class User extends DB  // User ichida DB property lari bor meros olganimiz uchun
         $user = $stmt->fetch();
         if ($user && password_verify($password, $user->password)) // User kiritgan parol bilan hashlangan parol to'g'ri bo'lsa TRUE
         {
+            $this->createApiToken($user->id);
             return true;
         }
         return false;

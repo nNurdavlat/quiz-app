@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 use App\Http\Controllers\API\UserController;
-use App\Http\Router;
+use src\Router;
 
 
 Router::get('/todos', [UserController::class, 'index']); // UserController classini index ishlasin. echo UserController deb yozzask namespace qytaradi
