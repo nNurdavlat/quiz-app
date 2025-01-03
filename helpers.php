@@ -2,14 +2,14 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
-function view(string $page, array $data = [])
+function view(string $page, array $data = []): void
 {
     extract($data); // Bu yerda array "key" ni varible "value" ni esa qiymati qilib oladi
-    require 'views/' . $page . '.php';
+    require 'resources/views/' . $page . '.php';
 }
 
 
-function redirect(string $url){
+#[NoReturn] function redirect(string $url){
     header("Location: $url");
     exit;
 }
