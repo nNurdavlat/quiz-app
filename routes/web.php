@@ -11,3 +11,5 @@ Router::get('/todos', [UserController::class, 'index']); // UserController class
 
 Router::get('/home', [HomeController::class, 'home']);
 Router::get("/about", [HomeController::class, 'about']);
+Router::get("/register", [HomeController::class, 'register']);
+Router::get("/login", [HomeController::class, 'login']);
