@@ -40,7 +40,7 @@
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Forgot your password?
                     </a>
-                    <p id="forTest"></p>
+                    <div id="error"></div>
                 </div>
             </div>
 
@@ -54,7 +54,29 @@
     </div>
 </div>
 
-<script src="js/main.js"></script>
+<script>
+    async function login()
+    {
+        let form = document.getElementById('form'),
+            formDate = new FormData(form);
+
+        const {default: apiFetch} = await import('./js/utils/apiFetch.js');
+        await apiFetch('/login', {method: 'POST', body: formDate})
+
+            .then((data) => {
+                localStorage.setItem('token', data.token);
+                window.location.href = '/dashboard';
+            })
+            .catch((error) =>
+            {
+                console.error(error.data.errors);
+                Object.keys(error.data.errors).forEach(err =>
+                {
+                    document.getElementById('error').innerHTML += `<p class="text-red-500 mt-1">${error.data.errors[err]}</p>`;
+                })
+            });
+    }
+</script>
 
 </body>
 </html>
