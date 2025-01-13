@@ -3,7 +3,7 @@
 namespace Src;
 
 use App\Models\DB;
-use PDO;
+
 
 class Auth
 {
@@ -14,7 +14,7 @@ class Auth
     {
         apiResponse([
             'message' => 'Unauthorized'
-        ],403);
+        ],401);
     }
     if (!str_starts_with($headers['Authorization'], 'Bearer '))
     {
@@ -36,7 +36,7 @@ class Auth
     {
         apiResponse([
             'message' => 'Unauthorized'
-        ],403);
+        ],401);
     }
     return true;
  }

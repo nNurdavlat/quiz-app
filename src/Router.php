@@ -8,7 +8,7 @@ class Router
 
     public function __construct()
     {
-        $this->currentRoute = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); //Bu localhost/ <- Shu bo'sh joydagi yozuvni olib beradi yoki bolmasa "/" shuni oladi
+        $this->currentRoute = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // '/' <- Shu bo'sh joydagi yozuvni olib beradi
     }
 
     public static function getRoute(): false|array|int|string|null
@@ -35,22 +35,22 @@ class Router
         return $resourceValue ?: false;
     }
 
-    public static function runCallback(string $route, callable|array $callback): void
-    {
-        if (gettype($callback) == 'array')
-        {
+    public static function runCallback(string $route, callable|array $callback, ?string $middleware=null): void{
+        if (gettype($callback) == 'array') {
             $resourceValue = self::getResource($route);  // getResource dan qaytvotgan returni shunga tenglab olamiz
             if ($resourceValue)
             {
                 $resourceRoute = str_replace('{id}', $resourceValue, $route);
                 if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
                 {
+                    self::middleware($middleware);
                     (new $callback[0])->{$callback[1]}(); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
                     exit();  // new $callback[0]->index qilsak hardoim ham index kelavermaydi bu denamik bo'lishi kerak. Nimaga 1 chunki qaysi method ishlashi 1 indexda jonatilgan
                 }
             }
             if ($route == self::getRoute())
             {
+                self::middleware($middleware);
                 (new $callback[0])->{$callback[1]}();
                 exit();
             }
@@ -64,19 +64,21 @@ class Router
             $resourceRoute = str_replace('{id}', $resourceValue, $route);
             if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
             {
+                self::middleware($middleware);
                 $callback($resourceValue);
                 exit();
             }
         }
         if ($route == self::getRoute())
         {
+            self::middleware($middleware);
             $callback();
             exit();
         }
     }
 
 
-    public static function get(string $route, callable|array $callback): void
+    public static function get(string $route, callable|array $callback, ?string $middleware=null): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET')
         {
@@ -114,13 +116,33 @@ class Router
         }
     }
 
+
     public static function isApiCall(): bool
     {
         return mb_stripos(self::getRoute(), '/api') === 0;
     }
 
 
-    public static function notFound()
+
+
+    public static function middleware(?string $middleware=null): void
+    {
+        if ($middleware)
+        {
+            $middlewareConfig = require '../config/middleware.php';
+            if (is_array($middlewareConfig))
+            {
+                if (array_key_exists($middleware, $middlewareConfig))
+                {
+                    $middlewareClass = $middlewareConfig[$middleware];
+                    (new $middlewareClass)->handle();
+                }
+            }
+        }
+    }
+
+
+    public static function notFound(): void
     {
         if (self::isApiCall())
         {

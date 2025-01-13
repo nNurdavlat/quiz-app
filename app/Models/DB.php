@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models;
+namespace App\Models;
 
 use PDO;
 
@@ -25,7 +25,7 @@ class DB
             ]);
     }
 
-    public function getConnection()
+    public function getConnection(): PDO
     {
         return $this->conn;
     }
