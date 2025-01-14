@@ -39,4 +39,15 @@ class User extends DB  // User ichida DB property lari bor meros olganimiz uchun
         }
         return false;
     }
+
+    public function getUserById(int $id)
+    {
+        $query = "SELECT id,full_name,email,updated_at,created_at FROM users WHERE id = :id";
+        $stmt = $this->conn
+            ->prepare($query);
+        $stmt->execute([
+            ':id' => $id
+        ]);
+        return $stmt->fetch();
+    }
 }
