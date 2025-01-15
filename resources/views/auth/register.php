@@ -19,7 +19,7 @@
                 </a>
             </p>
         </div>
-        <form id="form" class="mt-8 space-y-6" action="#" method="POST">
+        <form onsubmit="register()" id="form" class="mt-8 space-y-6"  method="POST">
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
                     <label for="name" class="sr-only">Full name</label>
@@ -56,7 +56,7 @@
                 </label>
             </div>
             <div>
-                <button type="button" onclick="register()"
+                <button type="submit"
                         class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Create Account
                 </button>
@@ -65,32 +65,27 @@
     </div>
 </div>
 
-<!--<script src="js/main.js"></script>-->
-<!--function register(){-->
-<!--let form = document.getElementById('form'), // Auth/register.php  form ni idsidagi nom-->
-<!--formDate = new FormData(form);-->
-<!---->
-<!--fetch('http://localhost:8080/api/register', {-->
-<!--method: 'POST',-->
-<!--body: formDate,-->
-<!--})-->
-<!---->
-<!--.then(function(response){-->
-<!---->
-<!--if(response.ok){-->
-<!--return response.json();-->
-<!--}-->
-<!---->
-<!--return Promise.reject(response);-->
-<!--})-->
-<!---->
-<!--.then(function(data){-->
-<!--console.log(data);-->
-<!--})-->
-<!--.catch(function(error){-->
-<!--console.log(error);-->
-<!--});-->
-<!--}-->
+<script>
+    async function register(){
+        event.preventDefault();
+        let form = document.getElementById("form"),
+            formData = new FormData(form);
+
+        const {default: apiFetch } = await import('./js/utils/apiFetch.js');
+        await apiFetch('/register', {method: 'POST', body: formData})
+            .then((data) => {
+                localStorage.setItem('token', data.token)
+                window.location.href = '/dashboard';
+            })
+            .catch((error) => {
+                document.getElementById('error').innerHTML = '';
+                console.error(error.data);
+                Object.keys(error.data.errors).forEach(err => {
+                    document.getElementById('error').innerHTML += `<p class="text-red-500 mt-1">${error.data.errors[err]}</p>`;
+                })
+            });
+    }
+</script>
 
 
 </body>

@@ -7,7 +7,6 @@ async function user()
         })
         .catch((error) =>
         {
-            window.location.href = '/login'
         });
 }
 user();

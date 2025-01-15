@@ -7,18 +7,23 @@
             </button>
         </div>
     </div>
-    <nav class="flex-grow p-4">
-        <a href="/dashboard" class="block p-3 mb-2 text-gray-800 bg-gray-100 rounded-lg">
-            <i class="fas fa-home mr-2"></i> Dashboard
-        </a>
-        <a href="/dashboard/quizzes" class="block p-3 mb-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            <i class="fas fa-book mr-2"></i> My Quizzes
-        </a>
-        <a href="/dashboard/create-quiz" class="block p-3 mb-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            <i class="fas fa-plus mr-2"></i> Create Quiz
-        </a>
-        <a href="/dashboard/statistics" class="block p-3 mb-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            <i class="fas fa-chart-bar mr-2"></i> Statistics
-        </a>
+    <nav class="flex-grow p-4" id="sideBar">
+
     </nav>
 </aside>
+
+<script>
+    let sideBar = document.getElementById('sideBar')
+    let sideBarItem = [
+        {'name':'Dashboard', 'uri':'/dashboard', 'icon':'fas fa-home mr-2'},
+        {'name':'My Quizzes', 'uri':'/dashboard/quizzes', 'icon':'fas fa-book mr-2'},
+        {'name':'Create Quiz', 'uri':'/dashboard/create-quiz', 'icon':'fas fa-plus mr-2'},
+        {'name':'Statistics', 'uri':'/dashboard/statistics', 'icon':'fas fa-chart-bar mr-2'}
+    ];
+    sideBarItem.forEach((item)=>{
+        let isActive = window.location.pathname === item.uri ? 'bg-gray-100' : 'hover:bg-gray-100';
+        sideBar.innerHTML += `<a href="${item.uri}" class="block p-3 mb-2 text-gray-800 ${isActive} rounded-lg">
+            <i class="${item.icon}"></i> ${item.name}
+        </a>`
+    })
+</script>
