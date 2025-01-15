@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Quiz App</title>
-    <link rel="stylesheet" href="css/tailwind.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="bg-gray-50">
+<?php require '../resources/views/components/header.php'?>
+<div class="bg-gray-50">
 <!-- Navigation -->
 <nav class="bg-white shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -184,7 +176,7 @@
         </div>
     </div>
 </footer>
-
+</div>
 <script>
     // Mobile menu toggle
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
@@ -194,5 +186,4 @@
         mobileMenu.classList.toggle('hidden');
     });
 </script>
-</body>
-</html>
+<?php require '../resources/views/components/footer.php'?>
