@@ -8,17 +8,16 @@ function view(string $page, array $data = []): void
     require 'resources/views/' . $page . '.php';
 }
 
+function components(string $component, array $data = []): void
+{
+    extract($data); // Bu yerda array "key" ni varible "value" ni esa qiymati qilib oladi
+    require 'resources/views/components/' . $component . '.php';
+}
 
 #[NoReturn] function redirect(string $url){
     header("Location: $url");
     exit;
 }
-
-function dumpDie($value)
-{
-    var_dump($value);
-    exit();
-}  // Xatoliklarni tekshirib oldini olish uchun
 
 
 #[NoReturn] function apiResponse($data, $status = 200): void
