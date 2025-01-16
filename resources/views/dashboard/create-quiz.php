@@ -36,7 +36,7 @@
                     </div>
 
                     <!-- Main Form -->
-                    <form class="space-y-4" id="quizForm" method="POST">
+                    <form class="space-y-4" id="quizForm" onsubmit="createQuiz()" method="POST">
                         <!-- Quiz Details Section -->
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Quiz Details</h3>
@@ -104,6 +104,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="error"></div>
                         </div>
 
                         <!-- Submit Button -->
@@ -120,4 +121,28 @@
     </div>
 </div>
 </div>
-</html>
+    <script>
+        async function createQuiz()
+        {
+            event.preventDefault()
+            let form = document.getElementById('quizForm'),
+                formDate = new FormData(form);
+
+            const {default: apiFetch} = await import('/js/utils/apiFetch.js');
+            await apiFetch('/quizzes', {method: 'POST', body: formDate})
+
+                .then((data) => {
+                   console.log(data);
+                })
+                .catch((error) =>
+                {
+                    document.getElementById('error').innerHTML = '';
+                    console.log(error.data);
+                    Object.keys(error.data.errors).forEach(err =>
+                    {
+                        document.getElementById('error').innerHTML += `<p class="text-red-500 mt-1">${error.data.errors[err]}</p>`;
+                    })
+                });
+        }
+    </script>
+<?php components('dashboard/footer');?>
