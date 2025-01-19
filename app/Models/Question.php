@@ -6,7 +6,7 @@ use App\Models\DB;
 
 class Question extends DB
 {
-    public function create(int $quizId, string $questionText)
+    public function create(int $quizId, string $questionText): false|string
     {
         $query = "INSERT INTO questions (quiz_id, question_text, updated_at, created_at)
                 VALUES (:quizId, :question_text, NOW(), NOW())";
@@ -17,4 +17,5 @@ class Question extends DB
         ]);
         return $this->conn->lastInsertId();
     }
+
 }

@@ -44,7 +44,7 @@ class Router
                 if ($resourceRoute == self::getRoute()) // (new static()) = deganimizda obyekt paydo bo'ladi. Routerdan olingan obyekt paydo bo'ladi
                 {
                     self::middleware($middleware);
-                    (new $callback[0])->{$callback[1]}(); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
+                    (new $callback[0])->{$callback[1]}($resourceValue); // calbback[0] desak namespace keladi new deb obyekt qilvoramiz. {} <- Probel oldini oladi
                     exit();  // new $callback[0]->index qilsak hardoim ham index kelavermaydi bu denamik bo'lishi kerak. Nimaga 1 chunki qaysi method ishlashi 1 indexda jonatilgan
                 }
             }
@@ -108,11 +108,11 @@ class Router
         }
     }
 
-    public static function delete(string $route, callable|array $callback): void
+    public static function delete(string $route, callable|array $callback, ?string $middleware=null): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
         {
-           self::runCallback($route, $callback);
+           self::runCallback($route, $callback, $middleware);
         }
     }
 

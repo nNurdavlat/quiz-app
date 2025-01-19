@@ -61,7 +61,7 @@
         let form = document.getElementById('form'),
             formDate = new FormData(form);
 
-        const {default: apiFetch} = await import('./js/utils/apiFetch.js');
+        const {default: apiFetch} = await import('/js/utils/apiFetch.js');
         await apiFetch('/login', {method: 'POST', body: formDate})
 
             .then((data) => {

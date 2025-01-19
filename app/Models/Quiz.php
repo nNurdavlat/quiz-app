@@ -19,4 +19,25 @@ class Quiz extends DB
         ]);
         return $this->conn->lastInsertId();
     }
+
+
+    public function getByUserId(int $userId): array
+    {
+        $query = "SELECT * FROM quizzes WHERE user_id = :userId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ':userId' => $userId,
+        ]);
+        return $stmt->fetchAll();
+    }
+
+
+    public function delete(int $quizId): bool
+    {
+        $query = "DELETE FROM quizzes WHERE id = :quizId";
+        $stmt = $this->conn->prepare($query);
+         return $stmt->execute([
+            ':quizId' => $quizId,
+        ]);
+    }
 }

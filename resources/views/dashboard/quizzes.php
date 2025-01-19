@@ -62,13 +62,30 @@
             </div>
 
             <!-- Quiz Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Quiz Card 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="quizList">
+
+
+            </div>
+        </main>
+    </div>
+</div>
+</div>
+
+<script>
+    async function quizzes()
+    {
+        const {default: apiFetch} = await import('/js/utils/apiFetch.js'),
+            quizList = document.getElementById('quizList');
+        await apiFetch('/quizzes', {method: 'GET'})
+
+            .then((data) => {
+                data.quizzes.forEach((quiz) => {
+                    quizList.innerHTML += `
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-lg font-semibold">Basic Mathematics</h3>
-                            <p class="text-gray-500 text-sm">Mathematics</p>
+                            <h3 class="text-lg font-semibold">${quiz.title}</h3>
+                            <p class="text-gray-500 text-sm">Different categories</p>
                         </div>
                         <div class="dropdown">
                             <button class="p-2 hover:bg-gray-100 rounded-full">
@@ -78,10 +95,10 @@
                             </button>
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">Test basic arithmetic and algebraic concepts</p>
+                    <p class="text-gray-600 mb-4">${quiz.description}</p>
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-sm text-gray-500">10 Questions</span>
-                        <span class="text-sm text-gray-500">15 minutes</span>
+                        <span class="text-sm text-gray-500">${quiz.time_limit} minutes</span>
                     </div>
                     <div class="mb-4">
                         <div class="w-full bg-gray-200 rounded-full h-2">
@@ -92,22 +109,34 @@
                     <div class="flex justify-between">
                         <button class="text-indigo-600 hover:text-indigo-800">Edit</button>
                         <button class="text-green-600 hover:text-green-800">View Results</button>
-                        <button class="text-red-600 hover:text-red-800">Delete</button>
+                        <button class="text-red-600 hover:text-red-800" onclick="deleteQuiz(${quiz.id})">Delete</button>
                     </div>
                 </div>
 
-                <!-- Quiz Card 2 -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <!-- Similar structure to Quiz Card 1 -->
-                </div>
+                    `
+                })
+            })
+            .catch((error) =>
+            {
+                alert("Intternatiznga qarasang bo'lmaydimi! :)");
+            });
+    }
+    quizzes();
 
-                <!-- Quiz Card 3 -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <!-- Similar structure to Quiz Card 1 -->
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
-</div>
+    async function deleteQuiz(id){
+        if (confirm('Are you sure?')){
+
+            const {default: apiFetch} = await import('/js/utils/apiFetch.js');
+            await apiFetch(`/quizzes/${id}`, {method: 'DELETE'})
+
+                .then((data) => {
+                    window.location.href = '/dashboard/quizzes';
+                })
+                .catch((error) => {
+                    alert("Internetinga qarasang bo'lmaydimi");
+                });
+        }
+    }
+</script>
+
 <?php components('dashboard/footer');?>

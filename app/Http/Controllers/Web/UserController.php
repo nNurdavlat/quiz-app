@@ -9,8 +9,5 @@ class UserController
     public function create_quiz(): void { view('dashboard/create-quiz'); }
     public function statistics(): void { view('dashboard/statistics'); }
 
-    public function handlePost ()
-    {
-        dd($_REQUEST);
-    }
+    public function take(): void { view('take-quiz'); }
 }

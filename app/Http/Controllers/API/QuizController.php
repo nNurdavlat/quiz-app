@@ -11,8 +11,14 @@ use Src\Auth;
 class QuizController
 {
     use Validator;
-    public function store()
+
+    public function index()
     {
+        $quiz = (new Quiz())->getByUserId(Auth::user()->id);
+        apiResponse(['quizzes' => $quiz]);
+    }
+
+    public function store() {
         $quizItems = $this->validate([
            'title' => 'string',
             'description' => 'string',
@@ -38,7 +44,15 @@ class QuizController
                 $option->create($question_id, $optionItem, $correct == $key);
             }
         }
-
             apiResponse( ['message' => 'Quiz created successfully',],201);
+    }
+
+    public function destroy(int $quizId)
+    {
+        $quiz = new Quiz();
+        $quiz->delete($quizId);
+        apiResponse([
+            'message' => 'Quiz deleted successfully'
+        ]);
     }
 }
