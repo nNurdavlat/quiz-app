@@ -97,13 +97,13 @@ class Router
 
 
 
-    public static function put(string $route, callable|array $callback): void
+    public static function put(string $route, callable|array $callback, ?string $middleware=null): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')
         {
             if ((isset($_POST['_method']) &&  $_POST['_method'] == 'PUT') || $_SERVER['REQUEST_METHOD'] == 'PUT')
             {
-                self::runCallback($route, $callback);
+                self::runCallback($route, $callback, $middleware);
             }
         }
     }

@@ -31,6 +31,18 @@ class Quiz extends DB
         return $stmt->fetchAll();
     }
 
+    public function update(int $quizId, string $title, string $description, int $timeLimit): bool
+    {
+        $query = "UPDATE quizzes SET title = :title, description = :description, time_limit = :timeLimit WHERE id = :quizId";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([
+            ':title' => $title,
+            ':description' => $description,
+            ':timeLimit' => $timeLimit,
+            ':quizId' => $quizId,
+        ]);
+    }
+
 
     public function delete(int $quizId): bool
     {

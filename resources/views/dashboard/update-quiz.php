@@ -129,7 +129,7 @@
                 formDate = new FormData(form);
 
             const {default: apiFetch} = await import('/js/utils/apiFetch.js');
-            await apiFetch('/quizzes', {method: 'POST', body: formDate})
+            await apiFetch(`/quizzes/${<?php echo $id; ?>}`, {method: 'PUT', body: formDate})
 
                 .then((data) => {
                    window.location.href = '/dashboard/quizzes'
