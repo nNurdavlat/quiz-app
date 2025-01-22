@@ -20,6 +20,16 @@ class Quiz extends DB
         return $this->conn->lastInsertId();
     }
 
+    public function find(int $quizId)
+    {
+        $query = "SELECT * FROM quizzes WHERE id = :quizId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ':quizId' => $quizId
+        ]);
+        return $stmt->fetch();
+    }
+
 
     public function getByUserId(int $userId): array
     {

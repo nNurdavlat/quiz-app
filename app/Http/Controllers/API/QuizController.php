@@ -18,6 +18,13 @@ class QuizController
         apiResponse(['quizzes' => $quiz]);
     }
 
+    public function show(int $quizId){
+        $quiz = (new Quiz())->find($quizId);
+        $questions = (new Question())->getWithOptions($quizId);
+        $quiz->questions = $questions;
+        apiResponse( $quiz );
+    }
+
     public function store() {
         $quizItems = $this->validate([
            'title' => 'string',
