@@ -27,7 +27,7 @@ class Question extends DB
         ]);
     }
 
-    public function getWithOptions(int $quizId)
+    public function getWithOptions(int $quizId): array
     {
         $stmt = $this->conn->prepare("SELECT * FROM questions WHERE quiz_id = :quizId");
         $stmt->execute(['quizId' => $quizId,]);
