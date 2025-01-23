@@ -20,7 +20,7 @@ class Question extends DB
 
     public function deleteByQuizId (int $questionId): bool
     {
-        $query = "DELETE FROM questions WHERE id = :questionId";
+        $query = "DELETE FROM questions WHERE quiz_id = :questionId";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([
             'questionId' => $questionId,

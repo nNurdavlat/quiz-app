@@ -3,6 +3,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+use App\Http\Controllers\Web\QuizController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\HomeController;
 use Src\Router;
@@ -21,7 +22,7 @@ Router::get("/dashboard/create-quiz", [UserController::class, 'create_quiz']);
 Router::get("/dashboard/statistics", [UserController::class, 'statistics']);
 
 // Update and Delete
-Router::get('/dashboard/take-quiz', [UserController::class, 'take']);
+Router::get('/take-quiz/{id}', [QuizController::class, 'takeQuiz']);
 Router::get('/dashboard/quizzes/{id}/update', [UserController::class, 'update']);
 
 

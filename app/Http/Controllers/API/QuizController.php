@@ -63,31 +63,31 @@ class QuizController
             'timeLimit' => 'int',
             'questions' => 'array',
         ]);
-//
-//        $quiz = new Quiz();
-//        $question = new Question();
-//        $option = new Option();
-//
-//        // Update quiz
-//        $quiz_id = $quiz->update(
-//            Auth::user()->id,
-//            $quizItems['title'],
-//            $quizItems['description'],
-//            $quizItems['timeLimit']);
-//
-//        // Destroy all questions and options
-//        $question->deleteByQuizId($quizId);
-//
-//        $questions = $quizItems['questions'];
-//
-//        foreach ($questions as $questionItem) {
-//            $question_id = $question->create($quizId, $questionItem['quiz']);
-//            $correct = $questionItem['correct'];
-//            foreach ($questionItem['options'] as $key => $optionItem) {
-//                $option->create($question_id, $optionItem, $correct == $key);
-//            }
-//        }
-//        apiResponse( ['message' => 'Quiz updated successfully']);
+
+        $quiz = new Quiz();
+        $question = new Question();
+        $option = new Option();
+
+        // Update quiz
+        $quiz_id = $quiz->update(
+            $quizId,
+            $quizItems['title'],
+            $quizItems['description'],
+            $quizItems['timeLimit']);
+
+        // Destroy all questions and options
+        $question->deleteByQuizId($quizId);
+
+        $questions = $quizItems['questions'];
+
+        foreach ($questions as $questionItem) {
+            $question_id = $question->create($quizId, $questionItem['quiz']);
+            $correct = $questionItem['correct'];
+            foreach ($questionItem['options'] as $key => $optionItem) {
+                $option->create($question_id, $optionItem, $correct == $key);
+            }
+        }
+        apiResponse( ['message' => 'Quiz updated successfully']);
     }
 
     public function destroy(int $quizId)
