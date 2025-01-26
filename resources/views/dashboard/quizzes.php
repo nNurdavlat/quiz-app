@@ -108,7 +108,7 @@
                     </div>
                     <div class="flex justify-between">
                         <a href="/dashboard/quizzes/${quiz.id}/update" class="text-indigo-600 hover:text-indigo-800">Edit</a>
-                        <button class="text-green-600 hover:text-green-800">View Results</button>
+                        <button class="text-green-600 hover:text-green-800" onclick="copyContent('${quiz.unique_value}')">Share</button>
                         <button class="text-red-600 hover:text-red-800" onclick="deleteQuiz(${quiz.id})">Delete</button>
                     </div>
                 </div>
@@ -135,6 +135,15 @@
                 .catch((error) => {
                     alert("Internetinga qarasang bo'lmaydimi");
                 });
+        }
+    }
+    const copyContent = async (uniqueValue) =>{
+        try {
+            uniqueValue = '<?php echo $_ENV['APP_URL']?>' + '/take-quiz/' + uniqueValue;
+            await navigator.clipboard.writeText(uniqueValue);
+            alert("Contend copied to cliboard");
+        } catch (err){
+            console.error("Failed to copy: ", err);
         }
     }
 </script>
