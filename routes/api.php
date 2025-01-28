@@ -4,6 +4,7 @@
 use App\Http\Controllers\API\QuizController;
 use App\Http\Controllers\API\ResultController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\AnswerController;
 use src\Router;
 
 Router::post('/api/register', [UserController::class, 'store']);
@@ -21,6 +22,8 @@ Router::get('/api/quizzes/{id}/getByUniqueValue', [QuizController::class, 'showB
 
 // RESULTS
 Router::post('/api/results', [ResultController::class, 'store'],'auth:api');
+
+Router::post('/api/answers', [AnswerController::class, 'store'],'auth:api');
 
 
 

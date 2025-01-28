@@ -22,7 +22,7 @@ class ResultController
 
         if ($quiz) {
             $result = new Result();
-            $result->create(
+             $resultData = $result->create(
                 Auth::user()->id,
                 $quiz->id,
                 $quiz->time_limit
@@ -30,6 +30,7 @@ class ResultController
 
             apiResponse([
                 'message' => 'Result created successfully.',
+                'result' => $resultData
             ]);
         }
         apiResponse([

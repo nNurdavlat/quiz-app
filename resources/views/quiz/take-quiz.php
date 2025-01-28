@@ -158,8 +158,9 @@ components('dashboard/header');
 
         <!-- Quiz JavaScript -->
         <script>
-            let questions;
-            let quizData;
+            let questions,
+            quizData,
+                result;
             async function getQuizItems() {
                 const {default: apiFetch} = await import('/js/utils/apiFetch.js');
                 try {
@@ -232,7 +233,7 @@ components('dashboard/header');
                         const {default: apiFetch} = await import('/js/utils/apiFetch.js');
                         await apiFetch('/results', {method: 'POST', body: JSON.stringify({quiz_id: quizData.id})})
                             .then((data) => {
-                                console.log(data)
+                                result =data.result;
                             })
                             .catch((error) => {
                                 document.getElementById('error').innerHTML = '';
@@ -281,7 +282,7 @@ components('dashboard/header');
                     }
                 });
 
-                document.getElementById('submit-quiz').addEventListener('click', () => {
+                document.getElementById('submit-quiz').addEventListener('click', async () => {
                     let form = document.getElementById('options');
                     let formData = new FormData(form);
                     if (!formData.get('answer')) {
@@ -294,9 +295,30 @@ components('dashboard/header');
                     questions.splice(currentQuestionIndex, 1);
                     let question = questions[currentQuestionIndex],
                         questionContainer = document.getElementById('questionContainer');
+                    async function submitAnswer()
+                    {
+                        const {default: apiFetch} = await import('/js/utils/apiFetch.js');
+                        await apiFetch('/answers', {method: 'POST',
+                            body: JSON.stringify({
+                                result_id: result.id,
+                                option_id: formData.get('answer')
+                            })})
+
+                            .then((data) => {
+                            })
+                            .catch((error) =>
+                            {
+                                document.getElementById('error').innerHTML = '';
+                                Object.keys(error.data.errors).forEach(err =>
+                                {
+                                    document.getElementById('error').innerHTML += `<p class="text-red-500 mt-1">${error.data.errors[err]}</p>`;
+                                })
+                            });
+                    }
+                    submitAnswer();
                     if (question) {
                         displayQuestion(question);
-                    } else {
+                    }else {
                         // display result
                         questionContainer.innerHTML = '';
                         document.getElementById('results-card').classList.remove('hidden');
