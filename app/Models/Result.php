@@ -27,4 +27,16 @@ class Result extends DB
         $resultId = $this->conn->lastInsertId();
         return $this->find($resultId);
     }
+
+
+    public function getUserResult (int $userID, int $quizID)
+    {
+        $query = "SELECT * FROM results WHERE user_id = :userId AND quiz_id = :quizId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ':userId' => $userID,
+            ':quizId' => $quizID
+        ]);
+        return $stmt->fetch();
+    }
 }
