@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Result;
@@ -25,6 +26,9 @@ class ResultController
             $userResult = $result->getUserResult(Auth::user()->id, $quiz->id);
 
             if ($userResult) {
+                $correcAnswerCount = (new Answer())->getCorrectAnswer(Auth::user()->id, $quiz->id)->correctAnswerCount;
+                $questionCount = (new Question())->getQuestionCountByQuizId($quiz->id)->questionCount;
+                $quizzesCount = (new Quiz())->totalCountQuizzes(Auth::user()->id)->TotalAnswers;
                 $startedAt = strtotime($userResult->started_at);
                 $finishedAt = strtotime($userResult->finished_at);
                 $diff = abs($finishedAt - $startedAt);
@@ -39,9 +43,12 @@ class ResultController
                     'data' => [
                         'result' => [
                             'id' => $userResult->id,
-                            'quiz_id' => $userResult->quiz_id,
+                            'quiz' => $quiz,
                             'started_at' => $userResult->started_at,
                             'time_taken' => floor(($diff - $years * 365*60*60*24 - $months * 30*60*60*24 - $days*60*60*24 - $hours * 60*60) / 60),
+                            'correct_answer_count' => $correcAnswerCount,
+                            'question_count' => $questionCount,
+                            'total_quizzes_count' => $quizzesCount,
                         ],
                     ]
                 ],400);

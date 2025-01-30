@@ -29,4 +29,21 @@ class Answer extends DB
     }
 
 
+    public function getCorrectAnswer(int $userId, int $quizId)
+    {
+       $query = "SELECT COUNT(answers.id) AS correctAnswerCount
+                FROM answers
+                        JOIN results ON answers.result_id = results.id
+                        JOIN options ON answers.option_id = options.id
+                WHERE results.user_id = :userId
+                        AND results.quiz_id = :quizId
+                        AND options.is_correct = TRUE;";
+       $stmt = $this->conn->prepare($query);
+       $stmt->execute([
+           ':userId' => $userId,
+           ':quizId' => $quizId
+       ]);
+       return $stmt->fetch();
+    }
+
 }

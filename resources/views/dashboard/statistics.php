@@ -37,7 +37,7 @@
                                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
                     </div>
-                    <p class="text-3xl font-bold mt-2">42</p>
+                    <p class="text-3xl font-bold mt-2" id="total-quizzes-count">42</p>
                     <p class="text-green-500 text-sm mt-2">↑ 12% from last month</p>
                 </div>
 

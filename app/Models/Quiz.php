@@ -73,4 +73,16 @@ class Quiz extends DB
             ':quizId' => $quizId,
         ]);
     }
+
+
+    //O'zim qo'shdim
+    public function totalCountQuizzes(int $userId)
+    {
+        $query = "SELECT COUNT(id) AS TotalAnswers FROM quizzes WHERE user_id = :userId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+            ':userId' => $userId,
+        ]);
+        return $stmt->fetch();
+    }
 }
