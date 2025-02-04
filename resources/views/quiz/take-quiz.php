@@ -300,7 +300,7 @@ components('dashboard/header');
                         questionContainer = document.getElementById('questionContainer');
                     async function submitAnswer()
                     {
-                        const {default: apiFetch} = await import('/js/utils/apiFetch.js');
+                        const {default: apiFetch} = await import("<?php echo assets('/js/utils/apiFetch.js')?>");
                         await apiFetch('/answers', {method: 'POST',
                             body: JSON.stringify({
                                 result_id: result.id,
