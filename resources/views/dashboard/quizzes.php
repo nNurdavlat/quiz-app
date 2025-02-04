@@ -126,7 +126,7 @@
     async function deleteQuiz(id){
         if (confirm('Are you sure?')){
 
-            const {default: apiFetch} = await import('<?php echo assets('/js/utils/apiFetch.js')?>');
+            const {default: apiFetch} = await import("<?php echo assets('/js/utils/apiFetch.js')?>");
             await apiFetch(`/quizzes/${id}`, {method: 'DELETE'})
 
                 .then((data) => {
