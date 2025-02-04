@@ -7,9 +7,6 @@ async function user()
         })
         .catch((error) =>
         {
-            if (error.status == 401) {
-                window.location.href = '/login';
-            }
         });
 }
 user();
