@@ -1,6 +1,6 @@
 <?php components('dashboard/header');?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/js/dashboard/getUserInfo.js"></script>
+<script src="<?php echo assets('/js/dashboard/getUserInfo.js')?>"></script>
 <div class="bg-gray-100">
 <div class="min-h-screen flex">
     <!-- Sidebar -->

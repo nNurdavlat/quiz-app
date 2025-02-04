@@ -2,7 +2,7 @@
 components('dashboard/header');
 //dd($uniqueValue);
 ?>
-    <script src="/js/dashboard/getUserInfo.js"></script>
+    <script src="<?php echo assets('/js/dashboard/getUserInfo.js')?>"></script>
     <div class="flex flex-col min-h-screen bg-gray-100">
         <!-- Navigation -->
         <nav class="bg-white shadow-lg">
