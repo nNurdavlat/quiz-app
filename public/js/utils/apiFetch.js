@@ -1,6 +1,6 @@
 function    apiFetch(uri, options = {})
 {
-    const baseUrl = 'http://localhost:8080/api',
+    const baseUrl = 'http://khasanaf.beget.tech/api',
         token = localStorage.getItem('token');
 
     const defaultHeaders = {};
