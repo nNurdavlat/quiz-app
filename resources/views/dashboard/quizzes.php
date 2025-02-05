@@ -137,15 +137,52 @@
                 });
         }
     }
-    const copyContent = async (uniqueValue) =>{
+    const copyContent = (uniqueValue) => {
+        if (!document.queryCommandSupported("copy")) {
+            alert("Clipboard nusxalash qo'llab-quvvatlanmaydi.");
+            return;
+        }
+
         try {
-            uniqueValue = '<?php echo $_ENV['APP_URL']?>' + '/take-quiz/' + uniqueValue;
-            await navigator.clipboard.writeText(uniqueValue);
-            alert("Contend copied to cliboard");
-        } catch (err){
+            uniqueValue = "<?php echo $_ENV['APP_URL']?>" + '/take-quiz/' + uniqueValue;
+
+            // Yangi textarea elementi yaratamiz
+            const textarea = document.createElement("textarea");
+            textarea.value = uniqueValue;
+
+            // Elementni sahifaga qo'shamiz
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            // Nusxalash buyrug'ini bajarish
+            document.execCommand("copy");
+
+            // Sahifadan elementni olib tashlash
+            document.body.removeChild(textarea);
+
+            alert("Content copied to clipboard");
+        } catch (err) {
             console.error("Failed to copy: ", err);
         }
-    }
+    };
+
 </script>
 
 <?php components('dashboard/footer');?>
+
+
+
+
+
+
+
+
+<!--const copyContent = async (uniqueValue) =>{-->
+<!--try {-->
+<!--uniqueValue = '--><?php //echo $_ENV['APP_URL']?><!--' + '/take-quiz/' + uniqueValue;-->
+<!--await navigator.clipboard.writeText(uniqueValue);-->
+<!--alert("Contend copied to cliboard");-->
+<!--} catch (err){-->
+<!--console.error("Failed to copy: ", err);-->
+<!--}-->
+<!--}-->
