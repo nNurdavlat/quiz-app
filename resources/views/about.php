@@ -1,11 +1,11 @@
-<?php require '../resources/views/components/header.php'?>
-<div class="bg-gray-50">
+<?php components('dashboard/header'); ?>
+<body class="bg-gray-50">
 <!-- Navigation -->
 <nav class="bg-white shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
-                <a href="/" class="text-2xl font-bold text-indigo-600">Quiz App</a>
+                <a href="#"><h1 class="text-2xl font-bold text-indigo-600">Quiz App</h1></a>
             </div>
             <div class="flex items-center space-x-4">
                 <div class="hidden md:flex items-center space-x-4">
@@ -151,9 +151,9 @@
             <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
             <ul class="space-y-2">
                 <li><a href="/" class="text-gray-400 hover:text-white">Home</a></li>
-                <li><a href="/about.html" class="text-gray-400 hover:text-white">About</a></li>
-                <li><a href="/login.html" class="text-gray-400 hover:text-white">Login</a></li>
-                <li><a href="/register.html" class="text-gray-400 hover:text-white">Register</a></li>
+                <li><a href="/about" class="text-gray-400 hover:text-white">About</a></li>
+                <li><a href="/login" class="text-gray-400 hover:text-white">Login</a></li>
+                <li><a href="/register" class="text-gray-400 hover:text-white">Register</a></li>
             </ul>
         </div>
         <div>
@@ -176,7 +176,7 @@
         </div>
     </div>
 </footer>
-</div>
+
 <script>
     // Mobile menu toggle
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
@@ -186,4 +186,4 @@
         mobileMenu.classList.toggle('hidden');
     });
 </script>
-<?php require '../resources/views/components/footer.php'?>
+<?php components('dashboard/footer'); ?>
